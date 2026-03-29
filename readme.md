@@ -16,6 +16,11 @@ Builds project assets (if specified) and deploys them to GitHub Releases. Suppor
 
 # Changelog
 
+## v1.1.0 - [March 28, 2026]
+
+- Update actions to use default branches where able
+- Update `Setup Node` steps to use node version `lts/*`
+
 ## v1.0.0 - [August 30, 2025]
 
--   Init actions!
+- Init actions!
