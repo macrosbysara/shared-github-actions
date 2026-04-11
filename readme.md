@@ -1,5 +1,7 @@
 # Shared Github Actions
 
+View the [changelog](CHANGELOG.md)
+
 ## Code Checks (lint-if-changed + phpcs)
 
 Runs a lint command only if files matching specified extensions have changed. Supports custom lint commands and optional Bun setup.
@@ -13,14 +15,3 @@ Runs Playwright end-to-end tests in a specified environment using a provided npm
 ## Deploy & Release
 
 Builds project assets (if specified) and deploys them to GitHub Releases. Supports custom asset folder and plugin file names, and cancels previous runs for the same branch.
-
-# Changelog
-
-## v1.1.0 - [March 28, 2026]
-
-- Update actions to use default branches where able
-- Update `Setup Node` steps to use node version `lts/*`
-
-## v1.0.0 - [August 30, 2025]
-
-- Init actions!

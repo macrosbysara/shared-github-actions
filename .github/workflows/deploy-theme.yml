@@ -19,7 +19,17 @@ on:
       flags:
         type: string
         default: "-azr --delete"
-        description: "Optional flags to pass to the rsync command during deployment. Default: -azr --delete"
+        description: "Optional additional flags to pass to the rsync command during deployment. Default: `-azr --delete`."
+        required: false
+      with_autoload:
+        type: boolean
+        default: false
+        description: "Whether to include autoload files in the deployment. Default: false"
+        required: false
+      php_version:
+        type: string
+        default: "latest"
+        description: "The version of PHP to use when installing dependencies. Default: latest"
         required: false
 
 jobs:
@@ -39,6 +49,18 @@ jobs:
 
       - name: Run build
         run: npm run build
+
+      - name: Setup PHP with Composer
+        uses: shivammathur/setup-php@main
+        if: ${{ inputs.with_autoload }}
+        with:
+          php-version: ${{ inputs.php_version }}
+          tools: composer
+
+      - name: Install Composer dependencies
+        if: ${{ inputs.with_autoload }}
+        working-directory: wp-content/themes/${{ inputs.theme_name }}
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Read files array from package.json
         id: files
@@ -77,7 +99,7 @@ jobs:
       - name: Deploy theme via rsync
         run: |
           echo "Deploying theme directory to ${{ inputs.REMOTE }}"
-          RSYNC_OPTS="${{ inputs.flags }}"
+          RSYNC_OPTS="${{ inputs.flags }} --inplace --exclude='.*' --exclude='node_modules' --exclude='src' --exclude='*.log' --exclude='*.zip' --exclude='*.md' --exclude='*.json' --exclude='*.yml' --exclude='*.yaml' --exclude='*.env'"
           rsync $RSYNC_OPTS \
           -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.REMOTE_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
           "${{ inputs.theme_name }}/" \
