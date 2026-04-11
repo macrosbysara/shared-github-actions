@@ -58,7 +58,6 @@ jobs:
           tools: composer
 
       - name: Install Composer dependencies
-        working-directory: ${{ inputs.theme_name }}
         run: composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Read files array from package.json
