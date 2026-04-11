@@ -1,6 +1,10 @@
 # Changelog
 
-## v1.2.0 - [April 11, 2026]
+## v1.2.1 - [April 11, 2026]
+
+- Fixed Composer working directory
+
+## v1.2.0
 
 - Added: Default rsync flags
 - Added: composer autoloading flag
