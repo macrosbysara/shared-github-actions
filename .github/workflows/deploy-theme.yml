@@ -50,16 +50,6 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Setup PHP with Composer
-        uses: shivammathur/setup-php@main
-        if: ${{ inputs.with_autoload }}
-        with:
-          php-version: ${{ inputs.php_version }}
-          tools: composer
-
-      - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
-
       - name: Read files array from package.json
         id: files
         run: |
@@ -70,6 +60,18 @@ jobs:
         run: |
           mkdir "${{ inputs.theme_name }}"
           cp -r ${{ steps.files.outputs.files }} "${{ inputs.theme_name }}/"
+
+      - name: Setup PHP with Composer
+        uses: shivammathur/setup-php@main
+        if: ${{ inputs.with_autoload }}
+        with:
+          php-version: ${{ inputs.php_version }}
+          tools: composer
+
+      - name: Install Composer dependencies
+        working-directory: ${{ inputs.theme_name }}
+        if: ${{ inputs.with_autoload }}
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Upload theme bundle artifact
         uses: actions/upload-artifact@main
