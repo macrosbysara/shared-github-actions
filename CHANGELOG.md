@@ -1,8 +1,9 @@
 # Changelog
 
-## v1.3.0 - [October 21, 2026]
+## v1.3.1 - [October 21, 2026]
 
 - Added: Secret inputs now allow for use across orgs/accounts
+- Updated: Default rsync flags are more opinionated.
 
 ## v1.2.1 - [April 11, 2026]
 
