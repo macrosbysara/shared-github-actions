@@ -19,7 +19,7 @@ on:
       flags:
         type: string
         default: "-azr --delete --inplace --exclude='src'"
-        description: "Optional additional flags to pass to the rsync command during deployment. Default: `-azr --delete --inplace --exclude='src'`."
+        description: "Optional additional flags to pass to the rsync command during deployment."
         required: false
       with_autoload:
         type: boolean
@@ -112,6 +112,6 @@ jobs:
           echo "Deploying theme directory to ${{ inputs.REMOTE }}"
           RSYNC_OPTS="${{ inputs.flags }} --inplace --exclude='.*' --exclude='node_modules' --exclude='src' --exclude='*.log' --exclude='*.zip' --exclude='*.md' --exclude='*.json' --exclude='*.yml' --exclude='*.yaml' --exclude='*.env'"
           rsync $RSYNC_OPTS \
-          -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.REMOTE_PORT }} \
-          "${{ inputs.theme_name }}/" \
-          "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:www/${{ inputs.REMOTE }}/public_html/wp-content/themes/${{ inputs.theme_name }}/"
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.REMOTE_PORT }} -o StrictHostKeyChecking=accept-new" \
+            "${{ inputs.theme_name }}/" \
+            "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:www/${{ inputs.REMOTE }}/public_html/wp-content/themes/${{ inputs.theme_name }}/"
