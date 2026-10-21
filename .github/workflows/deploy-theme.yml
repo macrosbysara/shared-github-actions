@@ -115,8 +115,17 @@ jobs:
       - name: Deploy theme via rsync
         run: |
           echo "Deploying theme directory to ${{ inputs.REMOTE }}"
-          RSYNC_OPTS="${{ inputs.flags }} --inplace --exclude='.*' --exclude='node_modules' --exclude='src' --exclude='*.log' --exclude='*.zip' --exclude='*.md' --exclude='*.json' --exclude='*.yml' --exclude='*.yaml' --exclude='*.env'"
-          rsync $RSYNC_OPTS \
+          rsync ${{ inputs.flags }} --inplace \
+            --exclude='.*' \
+            --exclude='node_modules' \
+            --exclude='src' \
+            --exclude='*.log' \
+            --exclude='*.zip' \
+            --exclude='*.md' \
+            --exclude='*.json' \
+            --exclude='*.yml' \
+            --exclude='*.yaml' \
+            --exclude='*.env' \
             -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.REMOTE_PORT }} -o StrictHostKeyChecking=accept-new" \
             "${{ inputs.theme_name }}/" \
             "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:www/${{ inputs.REMOTE }}/public_html/wp-content/themes/${{ inputs.theme_name }}/"
