@@ -18,7 +18,7 @@ on:
         required: false
       flags:
         type: string
-        default: "-azr --delete --inplace --exclude='src'"
+        default: "-azvr --delete"
         description: "Optional additional flags to pass to the rsync command during deployment."
         required: false
       with_autoload:
@@ -101,11 +101,16 @@ jobs:
           path: ${{ inputs.theme_name }}
 
       - name: Configure SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+          ssh-keyscan -H -p "$REMOTE_PORT" "$REMOTE_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Deploy theme via rsync
         run: |
