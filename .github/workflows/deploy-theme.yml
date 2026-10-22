@@ -116,6 +116,8 @@ jobs:
         run: |
           echo "Deploying theme directory to ${{ inputs.REMOTE }}"
           rsync ${{ inputs.flags }} --inplace \
+            --include='block.json' \
+            --include='theme.json' \
             --exclude='.*' \
             --exclude='node_modules' \
             --exclude='src' \
